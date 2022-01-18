@@ -3,7 +3,6 @@ import 'package:pizza/resources/resources.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class SreenPizzCalc extends StatefulWidget {
   SreenPizzCalc({Key? key}) : super(key: key);
@@ -15,16 +14,12 @@ class SreenPizzCalc extends StatefulWidget {
 enum Souce { hot, sweet, cheese }
 
 class _SreenPizzCalcState extends State<SreenPizzCalc> {
-  final _pizaSizess = [25, 30, 40];
-  //final double _minSize = 0;
-  //final double _maxSize = _pizaSizess.length - 1.0;
   bool _isSlimTesto = false;
   double _pizzaSize = 20.0;
   int _cost = 100;
   Souce? _souce = Souce.hot;
   bool _addCheese = true;
   double _currentSliderValue = 0;
-  double _stepSliderValue = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -108,48 +103,79 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
               const SizedBox(
                 height: 5,
               ),
-              // SizedBox(
-              //   width: 300,
-              //   child: Slider(
-              //     value: _currentSliderValue,
-              //     min: 0.0,
-              //     max: _pizaSizess.length - 1.0,
-              //     divisions: _pizaSizess.length - 1,
-              //     onChanged: (double value) {
-              //       setState(() {
-              //         _currentSliderValue = value;
-              //       });
-              //     },
-              //   ),
-              // ),
-              SizedBox(
-                width: 330,
-                child: SfSlider(
-                    showLabels: true,
-                    interval: 1,
-                    min: 0.0,
-                    max: 2.0,
-                    stepSize: 1,
-                    showTicks: true,
-                    value: _stepSliderValue,
-                    onChanged: (dynamic values) {
-                      setState(() {
-                        _stepSliderValue = values as double;
-                      });
-                    },
-                    labelFormatterCallback:
-                        (dynamic actualValue, String formattedText) {
-                      return _pizaSizess[actualValue.toInt()].toString() + 'см';
-                    },
-                    tooltipTextFormatterCallback:
-                        (dynamic actualLabel, String formattedText) {
-                      return _pizaSizess[_stepSliderValue.toInt()].toString() +
-                          'см';
-                    },
-                    enableTooltip: true),
+              Center(
+                child: Stack(
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 52,
+                      width: 300,
+                    ),
+                    Container(
+                      height: 34,
+                      width: 300,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFECEFF1),
+                        borderRadius: BorderRadius.circular(36),
+                      ),
+                    ),
+                    Container(
+                      height: 34,
+                      width: 100,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF04111A),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(36.0),
+                          bottomLeft: Radius.circular(36.0),
+                        ),
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [Color(0xFF0079D0), Colors.transparent],
+                          stops: [
+                            0.1,
+                            0.1,
+                          ],
+                        ),
+                      ),
+                    ),
+                    const Positioned(
+                      bottom: 0,
+                      left: 93,
+                      child: Image(
+                        image: AssetImage(Ico.marker),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 3,
+                      left: 75,
+                      child: SizedBox(
+                        width: 250,
+                        child: SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            overlayColor: Colors.transparent,
+                            thumbColor: Colors.transparent,
+                            disabledThumbColor: Colors.transparent,
+                            overlappingShapeStrokeColor: Colors.transparent,
+                          ),
+                          child: Slider(
+                            value: _currentSliderValue,
+                            min: 0.0,
+                            max: 2.0,
+                            divisions: 2,
+                            onChanged: (double value) {
+                              setState(() {
+                                _currentSliderValue = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
-                height: 19,
+                height: 5,
               ),
               SizedBox(
                 width: 300,
