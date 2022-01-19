@@ -173,7 +173,7 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 42,
-                    width: 154,
+                    //width: 154,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           primary: const Color(0xFF0079D0),

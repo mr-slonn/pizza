@@ -30,13 +30,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Pizza',
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-      ),
+      // themeMode: ThemeMode.system,
+      // theme: ThemeData(
+      //   brightness: Brightness.light,
+      // ),
+      // darkTheme: ThemeData(
+      //   brightness: Brightness.dark,
+      // ),
       //home: ChangeAnnotatedRegion(),
       //home: const RegisterScreen(),
       home: SreenPizzCalc(),

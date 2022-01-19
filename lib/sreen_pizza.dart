@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pizza/resources/resources.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
+//import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class SreenPizzCalc extends StatefulWidget {
@@ -16,21 +16,32 @@ enum Souce { hot, sweet, cheese }
 
 class _SreenPizzCalcState extends State<SreenPizzCalc> {
   final _pizaSizess = [25, 30, 40];
-  //final double _minSize = 0;
-  //final double _maxSize = _pizaSizess.length - 1.0;
-  bool _isSlimTesto = false;
-  double _pizzaSize = 20.0;
-  int _cost = 100;
+
   Souce? _souce = Souce.hot;
-  bool _addCheese = true;
-  double _currentSliderValue = 0;
+  bool _addCheese = false;
   double _stepSliderValue = 0;
+
+  int _typeTesto = 0;
+
+  final int _costDefalut = 100;
+  int _testoCost = 50;
+  int _souceCost = 10;
+  int _sizeCost = 0;
+  int _dobCheez = 0;
+  late int _cost;
+
+  void getCost() {
+    _cost = _costDefalut + _testoCost + _sizeCost + _souceCost + _dobCheez;
+  }
+
+  @override
+  void initState() {
+    getCost();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    const outlineInputBorder = OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(36)),
-        borderSide: BorderSide(color: Colors.transparent));
     final mediaQuery = MediaQuery.of(context);
     return MaterialApp(
       home: Scaffold(
@@ -44,7 +55,7 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                 ),
               ),
               const SizedBox(
-                height: 34,
+                height: 20,
               ),
               Text(
                 'Калькулятор пиццы',
@@ -82,12 +93,23 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                 activeFgColor: Colors.white,
                 inactiveBgColor: const Color(0xFFECEFF1),
                 inactiveFgColor: const Color.fromRGBO(0, 0, 0, 0.4),
-                initialLabelIndex: 1,
+                initialLabelIndex: _typeTesto,
                 totalSwitches: 2,
                 labels: const ['Обычное тесто', 'Тонкое тесто'],
                 radiusStyle: true,
                 onToggle: (index) {
-                  //print('switched to: $index');
+                  setState(() {
+                    _typeTesto = index;
+                    switch (index) {
+                      case 0:
+                        _testoCost = 50;
+                        break;
+                      case 1:
+                        _testoCost = 0;
+                        break;
+                    }
+                    getCost();
+                  });
                 },
               ),
               const SizedBox(
@@ -108,20 +130,6 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
               const SizedBox(
                 height: 5,
               ),
-              // SizedBox(
-              //   width: 300,
-              //   child: Slider(
-              //     value: _currentSliderValue,
-              //     min: 0.0,
-              //     max: _pizaSizess.length - 1.0,
-              //     divisions: _pizaSizess.length - 1,
-              //     onChanged: (double value) {
-              //       setState(() {
-              //         _currentSliderValue = value;
-              //       });
-              //     },
-              //   ),
-              // ),
               SizedBox(
                 width: 330,
                 child: SfSlider(
@@ -133,8 +141,21 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                     showTicks: true,
                     value: _stepSliderValue,
                     onChanged: (dynamic values) {
+                      switch (values) {
+                        case 0:
+                          _sizeCost = 0;
+                          break;
+                        case 1:
+                          _sizeCost = 35;
+                          break;
+                        case 2:
+                          _sizeCost = 75;
+                          break;
+                      }
                       setState(() {
                         _stepSliderValue = values as double;
+
+                        getCost();
                       });
                     },
                     labelFormatterCallback:
@@ -164,7 +185,7 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                       letterSpacing: 0.02),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 322,
                 child: Column(
                   children: <Widget>[
@@ -181,6 +202,8 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                       onChanged: (Souce? value) {
                         setState(() {
                           _souce = value;
+                          _souceCost = 10;
+                          getCost();
                         });
                       },
                     ),
@@ -202,6 +225,8 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                       onChanged: (Souce? value) {
                         setState(() {
                           _souce = value;
+                          _souceCost = 33;
+                          getCost();
                         });
                       },
                     ),
@@ -223,6 +248,8 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                       onChanged: (Souce? value) {
                         setState(() {
                           _souce = value;
+                          _souceCost = 27;
+                          getCost();
                         });
                       },
                     ),
@@ -234,14 +261,14 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                     const SizedBox(
                       height: 18,
                     ),
-                    Container(
+                    SizedBox(
                       width: mediaQuery.size.width,
                       height: 56,
                       child: SwitchListTile(
                         tileColor: const Color(0xFFF0F0F0),
                         activeColor: const Color(0xFF0E4DA4),
                         contentPadding:
-                            const EdgeInsets.only(left: 6, right: 6),
+                            const EdgeInsets.only(left: 3, right: 3),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -249,7 +276,7 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                           'Дополнительный сыр',
                           style: GoogleFonts.inter(
                             color: const Color(0xFF263238),
-                            fontSize: 16,
+                            fontSize: 15,
                             height: 1.5,
                             letterSpacing: 0.01,
                           ),
@@ -258,6 +285,12 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                         onChanged: (bool value) {
                           setState(() {
                             _addCheese = value;
+                            if (_addCheese) {
+                              _dobCheez = 100;
+                            } else {
+                              _dobCheez = 0;
+                            }
+                            getCost();
                           });
                         },
                         secondary: const Image(image: AssetImage(Ico.cheese)),
@@ -281,20 +314,18 @@ class _SreenPizzCalcState extends State<SreenPizzCalc> {
                     const SizedBox(
                       height: 10,
                     ),
-                    SizedBox(
-                      width: 300,
+                    Container(
                       height: 34,
-                      child: TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                            hintStyle: TextStyle(
-                              color: Color.fromRGBO(0, 0, 0, 0.4),
-                            ),
-                            contentPadding: EdgeInsets.only(left: 12),
-                            filled: true,
-                            fillColor: Color(0xFFECEFF1),
-                            focusedBorder: outlineInputBorder,
-                            enabledBorder: outlineInputBorder),
+                      width: 360,
+                      decoration: const BoxDecoration(
+                          color: Color(0xFFECEFF1),
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '$_cost ₽',
+                        style: const TextStyle(
+                          color: Color(0xFF263238),
+                        ),
                       ),
                     ),
                     const SizedBox(
